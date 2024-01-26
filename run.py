@@ -15,7 +15,7 @@ REPORT_IMAGE_PATH = "./image/repbtn.png" # 참고 : 148x30 이미지
 
 ####################################################
 
-# 1. Leagueclient.exe 켜져있는지 감지하고 GUI window 실행, if not - alert
+# 1. 창 감지, 해상도 체크 후 열려있으면 gui window 오픈 
 rep_data = []
 gui_done = False
 
@@ -27,11 +27,10 @@ else:
   gui.alert(title="실행 불가",text="1. 클라이언트가 실행 중이 아니거나 \n2. 최소화되었거나 \n3. 해상도가 1600*900 이 아님")
   exit()
 
-# 2. GUI에서 체크한 n1, n2, n3번째 체크박스에 체크
+# 2. gui window에서 가져온 값으로 리폿하는 함수
 
 def report_process():
   try:
-    gui.alert(title="TFT Autoreport", text="자동 리폿을 시작합니다.")
     time.sleep(0.1)
     gui.getWindowsWithTitle(GAME_TITLE)[0].activate()
     time.sleep(0.3)  
@@ -66,16 +65,22 @@ def report_process():
     # 리폿 버튼 클릭
     repbtn = gui.locateOnScreen(REPORT_IMAGE_PATH)
     gui.click(x=repbtn.left + 74, y=repbtn.top + 15)
-    
+    time.sleep(0.1)
 
   except Exception as e:
     gui.alert(title="오류", text=f"이미지 인식 오류거나, 다른 오류가 발생한듯? \n오류내용: <{e}>")
+    raise Exception("리폿 과정에서 오류가 발생하였습니다.")
 
+# 함수 실행(체크박스 없어질 때까지 반복)
 if gui_done:
-  report_process()
-
-
-# 3. 문구입력창 감지 후 GUI에서 입력해둔 문구 입력
-# 4. 리폿버튼 감지 후 클릭
-# 5. 기다리기...(client lag)
-# 6. if [체크박스 감지됨] 이라면 2~6번 반복, if not - loop 종료 후 alert 출력
+  gui.alert(title="TFT Autoreport", text="자동 리폿을 시작합니다.")
+  while gui.locateAllOnScreen(CHECKBOX_IMAGE_PATH): # 없을시 빈 리스트 반환
+    try:
+      report_process()
+      if not gui.locateAllOnScreen(CHECKBOX_IMAGE_PATH):
+        gui.alert(title="완료", text="리폿이 완료되었습니다.")
+        break
+    except Exception as e:
+      gui.alert(title="오류", text="오류가 발생하여 프로세스를 종료합니다.")
+      break
+    time.sleep(0.5)
