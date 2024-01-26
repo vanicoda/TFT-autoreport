@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.messagebox
 
 # Tkinter 창
 window = tk.Tk()
@@ -51,19 +52,27 @@ textarea = tk.Text(window, height=8, width=40)
 textarea.pack()
 
 #버튼
-# !!! 체크박스 체크된지 확인(if not - alert), 입력한 문구 변수에 저장 후 textbox disable 시키기 !!!
 
 def button_onclick():
-    #리폿항목 가져오기
-    print(var_check_1.get())
-    print(var_check_2.get())
-    print(var_check_3.get())
-    print(var_check_4.get())
-    #리폿내용 가져오기
-    var_textarea = textarea.get("1.0", "end-1c")[:250]
-    print(var_textarea)
+    #리폿항목 초기화
+    report_data = []
+    #체크박스 체크된지 확인(if not - alert)
+    if var_check_1.get() or var_check_2.get() or var_check_3.get() or var_check_4.get():
+        #리폿내용 가져오기
+        var_textarea = textarea.get("1.0", "end-1c")[:250]
+
+        report_data.append(var_check_1.get())
+        report_data.append(var_check_2.get())
+        report_data.append(var_check_3.get())
+        report_data.append(var_check_4.get())
+        report_data.append(var_textarea)
+
     #창 닫기
-    window.destroy()
+        window.destroy()
+        print(report_data)
+        return report_data # 여기서부터 시작하기
+    else:
+        tkinter.messagebox.showerror("오류", "리폿 항목을 체크해주세요")
 
 button = tk.Button(window, text="자동 리폿 시작", command=button_onclick)
 button.pack(pady=10)
