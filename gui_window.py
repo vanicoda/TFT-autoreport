@@ -10,6 +10,7 @@ def gui_main():
     window.title("TFT Autoreport")
     window.geometry("350x600")
     window.resizable(width=False, height=False)
+    window.iconbitmap('./image/icon.ico')
 
     #빈공간 넣는 함수
     def insert_margin_y(parent, pad_amount):
@@ -105,7 +106,7 @@ def gui_main():
     textarea = tk.Text(window, height=8, width=40)
     textarea.pack()
 
-    #버튼
+    #리폿 시작 버튼
 
     def button_onclick():
         #체크박스 체크된지 확인

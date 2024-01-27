@@ -71,47 +71,6 @@ def report_process_2():
   gui.click(x = 960, y= 735)
   time.sleep(0.1 + (random.random() / 2)) # 0.1~0.6초 대기
 
-
-def report_process():
-  try:    
-    time.sleep(0.3)  
-
-    #이미지서칭
-    checkbox_images = list(gui.locateAllOnScreen(CHECKBOX_IMAGE_PATH))
-
-    first_checkbox_top = checkbox_images[0].top
-    first_checkbox_left = checkbox_images[0].left
-    
-    print(first_checkbox_top, first_checkbox_left)
-    
-    checkboxes_top = []
-    for i in range(4):
-      checkboxes_top.append(first_checkbox_top + (i*55)) #참고 : 체크박스 세로간격이 55px임
-
-    print(checkboxes_top)
-
-    # 체크박스 클릭
-    for i in range(4):
-      if rep_data[i]:
-        gui.click(x=first_checkbox_left + 12, y=checkboxes_top[i] + 12, duration=0.15)
-
-    # 리폿 내용 입력(복붙) - 이거 조건부로 고치기. 리폿내용 없으면 실행안되게.
-    time.sleep(0.5)
-    gui.click(x=first_checkbox_left + 24, y=checkboxes_top[3] + 50) #대충 이쯤에 리폿내용 적는 상자
-    time.sleep(0.5)
-    pyperclip.copy(rep_data[4])
-    gui.hotkey("ctrl", "v")
-    time.sleep(0.5)
-
-    # 리폿 버튼 클릭
-    repbtn = gui.locateOnScreen(CHECKBOX_IMAGE_PATH)
-    gui.click(x=repbtn.left + 74, y=repbtn.top + 15)
-    time.sleep(0.1)
-
-  except Exception as e:
-    gui.alert(title="오류", text=f"이미지 인식 오류거나, 다른 오류가 발생한듯? \n오류내용: <{e}>")
-    raise Exception("리폿 과정에서 오류가 발생하였습니다.")
-
 # 함수 실행
   
 if gui_done and rep_data != None:
@@ -120,9 +79,9 @@ if gui_done and rep_data != None:
   loop_count = 0
 
   try:
-    loop_count = int(gui.prompt('몇 번 반복해서 리폿할까요? 숫자만 입력해주세요.'))
+    loop_count = int(gui.prompt(title="반복 횟수", text="몇 번 반복해서 리폿할까요? 숫자만 입력해주세요."))
   except Exception as e:
-    gui.alert(title="오류", text=f"제대로 된 숫자를 입력해주세요.\n오류가 발생하여 프로그램을 종료합니다. \n 오류내용:{e}")
+    gui.alert(title="오류", text=f"오류가 발생하거나 실행을 취소하여 프로그램을 종료합니다. \n 오류내용:{e}")
     exit()
 
   all_ok = gui.confirm(title="마지막으로 확인", text=f"{rep_data[5]} 플레이어를 {loop_count}번 리폿합니다. 확실한가요?")
@@ -132,7 +91,7 @@ if gui_done and rep_data != None:
     for i in range(loop_count):
       report_process_2()
     
-    gui.alert(title="완료", text="리폿이 완료되었습니다.")
+    gui.alert(title="완료", text="리폿이 완료되었습니다. 프로그램을 종료합니다.")
     exit()
   else:
     gui.alert(title="취소됨", text="다시 실행해주세요.")
