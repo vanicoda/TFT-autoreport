@@ -107,8 +107,6 @@ def gui_main():
 
     #버튼
 
-    button_clicked = False
-
     def button_onclick():
         #체크박스 체크된지 확인
         if var_check_1.get() or var_check_2.get() or var_check_3.get() or var_check_4.get():
@@ -123,10 +121,7 @@ def gui_main():
 
             report_data.append(radio_var.get())
 
-
         #창 닫기
-            global button_clicked
-            button_clicked = True
             window.destroy()
         else:
             tkinter.messagebox.showerror("오류", "리폿 항목을 체크해주세요")
@@ -138,5 +133,5 @@ def gui_main():
     window.mainloop()
     
     # 프로그램 종료
-    if report_data is not [] and button_clicked == True:
+    if report_data != []:
         return report_data

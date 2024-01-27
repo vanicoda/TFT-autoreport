@@ -2,6 +2,7 @@
 import pyautogui as gui
 import time
 import pyperclip
+import random
 
 #모듈
 from checkwindow import check_window
@@ -11,7 +12,6 @@ import gui_window
 GAME_TITLE = "League of Legends"
 CLIENT_RES = (1600,900)
 CHECKBOX_IMAGE_PATH = "./image/checkbox.png" # 참고 : 24x24 이미지임
-REPORT_IMAGE_PATH = "./image/repbtn.png" # 참고 : 148x30 이미지
 
 ####################################################
 
@@ -30,10 +30,9 @@ else:
 # 2. gui window에서 가져온 값으로 리폿하는 함수
   
 def report_process_2():
-  
   #리폿버튼 클릭
-  gui.moveTo(x=240, y=200 + ((int(rep_data[5][0]) - 1) * 75)) # 참고: 플레이어 간격이 75px임
-  time.sleep(0.3)
+  gui.moveTo(x=400, y=265 + ((int(rep_data[5][0]) - 1) * 75)) # 참고: 플레이어 간격이 75px, 1등 리폿버튼 위치 : left 400 top 265
+  time.sleep(0.5)
   gui.click()
 
   #이미지서칭
@@ -42,19 +41,20 @@ def report_process_2():
   print(f"체크박스 {len(checkbox_images)}개 발견됨")
 
   if checkbox_images != None:
-    print(first_checkbox_top, first_checkbox_left)
 
     first_checkbox_top = checkbox_images[0].top
     first_checkbox_left = checkbox_images[0].left
 
-    # 체크박스 클릭
+    print(first_checkbox_top, first_checkbox_left)
 
   else:
     print("체크박스 이미지를 인식할 수 없습니다. 고정 좌표로 진행합니다")
 
-  
+  # 체크박스 클릭
+    
   for i in range(4):
-    gui.click(x=first_checkbox_left + 12 if checkbox_images != None else 557,
+    if rep_data[i]:
+      gui.click(x=first_checkbox_left + 12 if checkbox_images != None else 557,
                y=first_checkbox_top + (i*55) + 12 if checkbox_images != None else 377 + (i * 55), 
                duration=0.15) #참고 : 체크박스 세로간격이 55px, 첫번째 체크박스 top 545, left 365
   
@@ -68,11 +68,8 @@ def report_process_2():
     time.sleep(0.3)
   
   # 리폿 버튼 클릭
-    repbtn = gui.locateOnScreen(REPORT_IMAGE_PATH)
-    print(f"리폿버튼 발견됨")
-    gui.click(x=repbtn.left + 74 if repbtn != None else 800,
-                 y=repbtn.top + 15 if repbtn != None else 675)
-    time.sleep(0.1)
+  gui.click(x = 960, y= 735)
+  time.sleep(0.1 + (random.random() / 2)) # 0.1~0.6초 대기
 
 
 def report_process():
@@ -107,7 +104,7 @@ def report_process():
     time.sleep(0.5)
 
     # 리폿 버튼 클릭
-    repbtn = gui.locateOnScreen(REPORT_IMAGE_PATH)
+    repbtn = gui.locateOnScreen(CHECKBOX_IMAGE_PATH)
     gui.click(x=repbtn.left + 74, y=repbtn.top + 15)
     time.sleep(0.1)
 
@@ -119,13 +116,24 @@ def report_process():
   
 if gui_done and rep_data != None:
   gui.getWindowsWithTitle(GAME_TITLE)[0].activate()
-  loop_count = gui.prompt('몇 번 반복해서 리폿할까요?')
-  all_ok = gui.confirm(title="마지막으로 확인", text=f"{rep_data[5]}번 플레이어를 {loop_count}번 리폿합니다. 확실한가요?")
+
+  loop_count = 0
+
+  try:
+    loop_count = int(gui.prompt('몇 번 반복해서 리폿할까요? 숫자만 입력해주세요.'))
+  except Exception as e:
+    gui.alert(title="오류", text=f"제대로 된 숫자를 입력해주세요.\n오류가 발생하여 프로그램을 종료합니다. \n 오류내용:{e}")
+    exit()
+
+  all_ok = gui.confirm(title="마지막으로 확인", text=f"{rep_data[5]} 플레이어를 {loop_count}번 리폿합니다. 확실한가요?")
 
   if all_ok == "OK" :
-    gui.alert(title="시작", text="리폿을 시작합니다, 중단하길 원하신다면 ESC키를 눌러주세요.")
+    gui.alert(title="시작", text="리폿을 시작합니다.")
     for i in range(loop_count):
       report_process_2()
+    
+    gui.alert(title="완료", text="리폿이 완료되었습니다.")
+    exit()
   else:
     gui.alert(title="취소됨", text="다시 실행해주세요.")
     exit()
@@ -134,12 +142,12 @@ if gui_done and rep_data != None:
 if gui_done and rep_data == None:
   gui.alert(title="종료", text="프로그램을 종료합니다.")
   exit()
+
+
   
 
 # todos
-#1. 전체 로직 변경 (단순반복으로)
-#2. 이미지 서칭 실패하면 고정 좌표로 클릭(confirm 띄우고)
-    # 애초에 맨 처음에 이미지 서칭을 다 하고나서 저장된 좌표로 반복을 합시다.
-#4. 중간에 키보드로 escape하는 방법 만들기
-  
-#1등 리폿버튼 위치 : left 240 top 200(미리 마우스부터 가있어야함)
+# escape하는 방법 만들기. 안되면 최대 횟수 제한
+# 유저 테스트
+# 2번함수 잘 동작되면 원래꺼 삭제
+# 다 하고 주석/코드 정리
