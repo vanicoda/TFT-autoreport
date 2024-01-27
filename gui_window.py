@@ -34,7 +34,7 @@ def gui_main():
 
 
     radio_var = tk.StringVar()
-    radio_var.set(None)
+    radio_var.set("1등")
     options = ["1등", "2등", "3등", "4등", "5등", "6등", "7등", "8등"]
     opt_index = 0
 
@@ -107,6 +107,8 @@ def gui_main():
 
     #버튼
 
+    button_clicked = False
+
     def button_onclick():
         #체크박스 체크된지 확인
         if var_check_1.get() or var_check_2.get() or var_check_3.get() or var_check_4.get():
@@ -121,7 +123,10 @@ def gui_main():
 
             report_data.append(radio_var.get())
 
+
         #창 닫기
+            global button_clicked
+            button_clicked = True
             window.destroy()
         else:
             tkinter.messagebox.showerror("오류", "리폿 항목을 체크해주세요")
@@ -133,5 +138,5 @@ def gui_main():
     window.mainloop()
     
     # 프로그램 종료
-    if report_data is not []:
+    if report_data is not [] and button_clicked == True:
         return report_data
