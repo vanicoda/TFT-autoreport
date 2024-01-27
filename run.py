@@ -32,7 +32,7 @@ else:
 def report_process():
   try:
     time.sleep(0.1)
-    gui.getWindowsWithTitle(GAME_TITLE)[0].activate()
+    
     time.sleep(0.3)  
 
     #이미지서칭
@@ -71,16 +71,22 @@ def report_process():
     gui.alert(title="오류", text=f"이미지 인식 오류거나, 다른 오류가 발생한듯? \n오류내용: <{e}>")
     raise Exception("리폿 과정에서 오류가 발생하였습니다.")
 
-# 함수 실행(체크박스 없어질 때까지 반복)
-if gui_done:
-  gui.alert(title="TFT Autoreport", text="자동 리폿을 시작합니다.")
-  while gui.locateAllOnScreen(CHECKBOX_IMAGE_PATH): # 없을시 빈 리스트 반환
-    try:
+# 함수 실행
+  
+if gui_done and False:
+  gui.getWindowsWithTitle(GAME_TITLE)[0].activate()
+  loop_count = gui.prompt('몇 번 반복해서 리폿할까요?')
+  all_ok = gui.confirm(title="마지막으로 확인", text=f"{rep_data[5]}번 플레이어를 {loop_count}번 리폿합니다. 확실한가요?")
+
+  if all_ok == "OK" :
+    for i in range(loop_count):
       report_process()
-      if not gui.locateAllOnScreen(CHECKBOX_IMAGE_PATH):
-        gui.alert(title="완료", text="리폿이 완료되었습니다.")
-        break
-    except Exception as e:
-      gui.alert(title="오류", text="오류가 발생하여 프로세스를 종료합니다.")
-      break
-    time.sleep(0.5)
+  else:
+    gui.alert(title="취소됨", text="다시 실행해주세요.")
+    exit()
+
+# todos
+#1. 전체 로직 변경 (단순반복으로)
+#2. 이미지 서칭 실패하면 고정 좌표로 클릭(confirm 띄우고)
+#3. gui 종료버튼으로 눌렀을때는 전체 종료하기
+#4. 중간에 키보드로 escape하는 방법 만들기
