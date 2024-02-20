@@ -17,7 +17,6 @@ FIRST_CHECKBOX_COORD = (545, 365) #참고 : 체크박스 세로간격이 55px, �
 REP_TEXTBOX_COORD = (700, 600) 
 REP_BTN_COORD = (800, 666) 
 
-####################################################
 
 # 1. 창 감지, 해상도 체크 후 열려있으면 gui window 오픈 
 rep_data = []
@@ -32,7 +31,6 @@ else:
   exit()
 
 # 2. gui window에서 가져온 값으로 리폿하는 함수
-  
 def report_process_2():
   #리폿버튼(느낌표) 클릭
   gui.moveTo(x=FIRST_EXC_COORD[0], y=FIRST_EXC_COORD[1] + ((int(rep_data[5][0]) - 1) * 75)) 
@@ -80,7 +78,6 @@ def report_process_2():
   time.sleep(0.1 + (random.random() / 2))
 
 # 3-1. gui 정상종료시 리폿 프로세스 시작(함수 실행)
-  
 if gui_done and rep_data != None:
   gui.getWindowsWithTitle(GAME_TITLE)[0].activate()
 

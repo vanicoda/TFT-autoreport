@@ -18,7 +18,6 @@ def gui_main():
         empty_label.pack(pady=pad_amount)
 
     # 라디오 프레임
-
     radioframe_title = tk.Label(window, text="리폿할 녀석")
     radioframe_title.pack()
 
@@ -32,8 +31,6 @@ def gui_main():
 
 
     #라디오 버튼 생성
-
-
     radio_var = tk.StringVar()
     radio_var.set("1등")
     options = ["1등", "2등", "3등", "4등", "5등", "6등", "7등", "8등"]
@@ -91,7 +88,6 @@ def gui_main():
     checkbox_4.pack(pady=5)
 
     # 체크박스 상태 확인 라벨 
-
     label = tk.Label(checkboxframe, textvariable=label_var)
     label.config(fg="red")
     label.pack()
@@ -99,7 +95,6 @@ def gui_main():
     insert_margin_y(window, 5)
 
     # 텍스트 상자
-
     textarea_label = tk.Label(window, text="리폿 내용(최대 250자)")
     textarea_label.pack()
 
@@ -107,7 +102,6 @@ def gui_main():
     textarea.pack()
 
     #리폿 시작 버튼
-
     def button_onclick():
         #체크박스 체크된지 확인
         if var_check_1.get() or var_check_2.get() or var_check_3.get() or var_check_4.get():
