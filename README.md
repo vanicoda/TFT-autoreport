@@ -10,10 +10,7 @@ https://vanicoda.dev/app/tftar/autoreport.zip
 ```
 git clone https://github.com/vanicoda/TFT-autoreport.git
 
-pip install pyautogui
-pip install pyperclip
-pip install tkinter
-pip install pygetwindow
+pip install pyautogui pyperclip tkinter pygetwindow
 
 python run.py
 ```
